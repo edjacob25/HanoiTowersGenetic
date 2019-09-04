@@ -6,7 +6,7 @@
 %%%%%%%%% Initial variables
 discs = 3; %numero de discos
 fathers = 10; %numero de padres
-movements = floor((2^discs-1)+9*(discs-3)+1); %numero de movimientos
+movements = 2^(discs - 1) + 1; %numero de movimientos
 tnum = 3; % numero de participantes por torneo
 mutrate = 0.2; %probabilidad de mutacion.
 seed = 111;
