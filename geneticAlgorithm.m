@@ -4,7 +4,8 @@ function [fitness, genes] = geneticAlgorithm(numDiscs, numFathers, movements, pa
     chromnumber = movements * 3; %numero de cromosomas en en cada gen
     genes = randi(2, numFathers, chromnumber) - 1; % estos son los genes random
     fitness = 0;
-
+    oraculo=ones(1,numDiscs)*(numDiscs+1)-[1:numDiscs];%asi debe quedar la tercera torre
+    oraculo_evaluado= (8*exp(-(1:numDiscs))+1)*oraculo'; %este debe ser el fitness de la tercera torre
     while 1 %el loop acaba cuando se encuentra un gen que resuelve el problema
         %%%%%%%%%%%%%%%%%%%%% FITNESS  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         fitness = zeros(numFathers, 1); %aqui se guarda el fitness de cada gen
@@ -82,7 +83,7 @@ function [fitness, genes] = geneticAlgorithm(numDiscs, numFathers, movements, pa
                 end
 
                 %rnfitness=sum(tower3(2:length(tower3))'); %este es el fitnes hata el momento
-                rnfitness = length(tower3) - 1;
+                rnfitness =  (8*exp(-(1:length(tower3)-1))+1)*tower3(2:end)';
 
                 if rnfitness > fitness(pnumber)
                     fitness(pnumber) = rnfitness;
@@ -92,7 +93,7 @@ function [fitness, genes] = geneticAlgorithm(numDiscs, numFathers, movements, pa
 
         end %aqui se saca el fitnes de cada padre
 
-        if max(fitness) > numDiscs - 1 %si se consigue la solucion esta condicion termina el loop
+        if max(fitness)==oraculo_evaluado %si se consigue la solucion esta condicion termina el loop
             break
         end
 
@@ -115,11 +116,15 @@ function [fitness, genes] = geneticAlgorithm(numDiscs, numFathers, movements, pa
             newindividuals(2 * crin, :) = [matingpool(2 * crin, 1:crpoint), matingpool(2 * crin - 1, crpoint + 1:chromnumber)]; %este es el segundo hijo
 
             if rand < mutationRate %mutacion del primer hijo
+                 for v=1:randi(3^numDiscs)
                 newindividuals(2 * crin - 1, randi(chromnumber)) = randi(2) - 1;
+                 end
             end
 
             if rand < mutationRate %mutacion del segundo hijo
+                 for w=1:randi(3^numDiscs)
                 newindividuals(2 * crin, randi(chromnumber)) = randi(2) - 1;
+                 end
             end
 
         end
